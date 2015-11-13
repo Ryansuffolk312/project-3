@@ -1,0 +1,130 @@
+Enter file contents here////Globals
+Ball a,b,c,d,e,f;
+
+float left, right, top, bottom;
+float middle;
+boolean wall=true;
+int tableRed=173, tableGreen=75, tableBlue=255;
+
+void setup() {
+  size(700, 500);
+   size(700, 500);
+   left= 50;
+   right= width-50;
+   top= 200;
+   bottom= height-50;
+   middle= right - left/2;
+///Cue
+   a= new Ball();
+   a.x=200;
+   a.y=top+bottom/2;
+   a.dx=0;
+   a.dy=0;
+   a.r=255;
+   a.g=255;
+   a.b=255;
+   a.name= "c";
+///Red Ball   
+   b= new Ball();
+   b.r=255;
+   b.name= "1";
+///Green ball
+   c= new Ball();
+   c.g=255;
+   c.name= "2";
+///Blue ball
+   d= new Ball();
+   d.b=255;
+   d.name= "3";
+///
+   e= new Ball();
+   e.b=255;
+   e.g=255;
+   e.name= "4";
+///
+   f= new Ball();
+   f.r=255;
+   f.b=255;
+   f.name= "5";
+//   
+   reset();
+}
+
+void reset(){
+  a.reset();
+  b.reset();
+  c.reset();
+  d.reset();
+  e.reset();
+  f.reset();
+///wall
+   wall=true;
+///color
+   tableRed=173; tableGreen=75; tableBlue=255;
+}
+
+ void draw(){
+     background( 250,250,200 );
+     rectMode( CORNERS );
+     table(left, top, right, bottom);
+     balls();
+ }
+ 
+ void table( float east, float north, float west, float south ) {
+  fill( tableRed, tableGreen, tableBlue );    // pool table
+  strokeWeight(20);
+  stroke( 127, 0, 0 );      // Brown walls
+  rect( east-20, north-20, west+20, south+20 );
+ 
+  ///Wall
+ if (wall) {
+    float middle=  (east+west)/2;    
+    stroke( 0, 127, 0 );
+    line( middle,north+10, middle,south-10 );
+  } else wall = false; 
+   stroke(0);
+   strokeWeight(1);
+ }
+ 
+ void balls() {
+   a.move();
+   b.move();
+   c.move();
+   d.move();
+   e.move();
+   f.move();
+   collision(a,b);
+   collision(a,c);
+   collision(a,d);
+   collision(a,e);
+   collision(a,f);
+   collision(b,c);
+   collision(b,d);
+   collision(b,e);
+   collision(b,f);
+   collision(c,d);
+   collision(c,e);
+   collision(c,f);
+   collision(d,e);
+   collision(d,f);
+   collision(e,f);
+   //
+   a.show();
+   b.show();
+   c.show();
+   d.show();
+   e.show();
+   f.show();
+ }
+   
+////Elastic collisions
+ void collision( Ball p, Ball q) {
+   if(p.hit( q.x, q.y) ) {
+     float tmp;
+     tmp=p.dx; p.dx=q.dx; q.dx=tmp;
+     tmp=p.dy; p.dy=q.dy; q.dy=tmp;
+   }
+ }
+ 
+   
+   
