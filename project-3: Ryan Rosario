@@ -1,4 +1,4 @@
-Enter file contents here////Globals
+////Globals
 Ball a,b,c,d,e,f;
 
 float left, right, top, bottom;
@@ -11,15 +11,11 @@ void setup() {
    size(700, 500);
    left= 50;
    right= width-50;
-   top= 200;
+   top= 100;
    bottom= height-50;
    middle= right - left/2;
 ///Cue
    a= new Ball();
-   a.x=200;
-   a.y=top+bottom/2;
-   a.dx=0;
-   a.dy=0;
    a.r=255;
    a.g=255;
    a.b=255;
@@ -51,7 +47,7 @@ void setup() {
 }
 
 void reset(){
-  a.reset();
+  a.x=100; a.y=280; a.dx=0; a.dy=0;
   b.reset();
   c.reset();
   d.reset();
@@ -62,9 +58,18 @@ void reset(){
 ///color
    tableRed=173; tableGreen=75; tableBlue=255;
 }
-
+ 
+ void keyPressed() {
+   if(key == 'r') {
+     reset();
+   }
+   if(key == 'w') {
+     wall=false;
+   }
+ }
+ 
  void draw(){
-     background( 250,250,200 );
+     background( #19F5E0 );
      rectMode( CORNERS );
      table(left, top, right, bottom);
      balls();
@@ -125,6 +130,52 @@ void reset(){
      tmp=p.dy; p.dy=q.dy; q.dy=tmp;
    }
  }
+ 
+ 
+ 
+ 
+ class Ball {
+  //// PROPERTIES:  position, speed, color, etc. ////   (What a Ball "has".)
+  float x,y, dx,dy;
+  int r,g,b;
+  String name="";
+  
+  
+  //// METHODS
+  void show() {
+    fill(r,g,b);
+    ellipse( x,y, 30,30 );
+    fill(0);
+    text( name, x-5,y );
+  }
+  void move() {
+    if(wall) {
+    if (x>right || x<width/1.9) {  dx=  -dx; }
+    if (y>bottom || y<top) {  dy=  -dy; }
+    }
+    else {
+    if (x>right || x<left) {  dx=  -dx; }
+    if (y>bottom || y<top) {  dy=  -dy; }
+    }
+
+    
+    x += dx;
+    y += dy;
+  }
+  void reset() {
+    x=  random(middle, right);
+    y=  random( top, bottom );
+    dx=  random( 1,3);
+    dy=  random( 1,3 );
+  }
+
+  
+  boolean hit( float x, float y ) {
+    if (  dist( x,y, this.x,this.y ) < 30 ) return true;
+    else return false;
+  }
+}
+
  
    
    
