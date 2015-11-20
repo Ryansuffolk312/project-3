@@ -1,6 +1,7 @@
 ////Globals
 Ball a,b,c,d,e,f;
 Rodent mouse;
+Bird pigeon;
 
 float left, right, top, bottom;
 float middle;
@@ -19,7 +20,6 @@ void setup() {
    a.r=255;
    a.g=255;
    a.b=255;
-   a.name= "c";
 ///Red Ball   
    b= new Ball();
    b.r=255;
@@ -32,12 +32,12 @@ void setup() {
    d= new Ball();
    d.b=255;
    d.name= "3";
-///
+///Yellow ball
    e= new Ball();
-   e.b=255;
+   e.r=255;
    e.g=255;
    e.name= "4";
-///
+///Violet ball
    f= new Ball();
    f.r=255;
    f.b=255;
@@ -45,6 +45,8 @@ void setup() {
 
 ///Rodent
    mouse= new Rodent();
+///Bird
+   pigeon= new Bird();
 //
    reset();
 }
@@ -57,12 +59,13 @@ void reset(){
   e.reset();
   f.reset();
   mouse.reset();
+  pigeon.reset();
 ///wall
    wall=true;
 ///color
    tableRed=173; tableGreen=75; tableBlue=255;
 }
- 
+/////Handlers
  void keyPressed() {
    if(key == 'q') {
       exit();
@@ -70,30 +73,37 @@ void reset(){
    if(key == 'r') {
      reset();
    }
+///Remove wall   
    if(key == 'w') {
      wall=false;
    }
+///Release mouse   
    if(key == 'm') {
      mouse.dx=5;
      mouse.dy=3;
    }
+///Release bird   
+   if(key == 'b') {
+     pigeon.dx=3;
+   }
  }
- 
+///Functions 
  void draw(){
      background( #19F5E0 );
      rectMode( CORNERS );
      table(left, top, right, bottom);
      balls();
      rodent();
+     bird();
  }
- 
+////Scene: Table and wall
  void table( float east, float north, float west, float south ) {
   fill( tableRed, tableGreen, tableBlue );    // pool table
   strokeWeight(20);
   stroke( 127, 0, 0 );      // Brown walls
   rect( east-20, north-20, west+20, south+20 );
  
-  ///Wall
+
  if (wall) {
     float middle=  (east+west)/2;    
     stroke( 0, 127, 0 );
@@ -102,7 +112,7 @@ void reset(){
    stroke(0);
    strokeWeight(1);
  }
- 
+////Show: Balls, Rodent, Bird 
  void balls() {
    a.move();
    b.move();
@@ -135,22 +145,42 @@ void reset(){
  }
  
  void rodent() {
+    snatch(mouse,a);
+    snatch(mouse,b);
+    snatch(mouse,c);
+    snatch(mouse,d);
+    snatch(mouse,e);
+    snatch(mouse,f);
+    //
     mouse.show();
     mouse.move();
  }
+ void bird() {
+    pigeon.show();
+    pigeon.move();
+ }
    
-////Elastic collisions
- void collision( Ball p, Ball q) {
+////Elastic collisions, Rodent collision 
+ void collision(Ball p, Ball q) {
    if(p.hit( q.x, q.y) ) {
      float tmp;
      tmp=p.dx; p.dx=q.dx; q.dx=tmp;
      tmp=p.dy; p.dy=q.dy; q.dy=tmp;
    }
+  }
+  
+  void snatch(Rodent mouse, Ball t) {
+    if(mouse.hit(t.x, t.y)) {
+      t.dx=0; t.dy=0; 
+    }
  }
+  
  
  
  
  
+ 
+/////Classes  
  class Ball {
   //// PROPERTIES:  position, speed, color, etc. ////   (What a Ball "has".)
   float x,y, dx,dy;
@@ -241,6 +271,37 @@ class Rodent{
     else return false;
  }
 }
+
+class Bird {
+////Properties
+  float x, y, dx, dy;
+
+////Methods
+  void show() {
+    fill(#7C95AF);     ellipse(x,y, 40, 20);///body
+    if(dx == -3 ){
+    fill(#7C95AF);     ellipse(x-20,y-10, 20, 20); }////head facing right
+    else{
+    fill(#7C95AF);     ellipse(x+20,y-10, 20,20);}///head facing left
+   if(frameCount % 30 > 15){ 
+    fill(#1665B7); triangle(x-10,y, x, y+25,  x+10, y);
+}
+   else{fill(#1665B7); triangle(x-10, y, x, y-25, x+10, y);
+}
+}
+  void move() {
+   if( x>width) { dx= -dx;}
+   if(dx == -3 && x<0) {dx= -dx;} 
+     x+=dx;
+  }
+ 
+  void reset() {
+    x = width-740; y=35;
+    dx=0;
+  }
+}
+   
+       
     
 
 
