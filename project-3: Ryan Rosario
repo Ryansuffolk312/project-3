@@ -1,5 +1,6 @@
 ////Globals
 Ball a,b,c,d,e,f;
+Rodent mouse;
 
 float left, right, top, bottom;
 float middle;
@@ -8,7 +9,6 @@ int tableRed=173, tableGreen=75, tableBlue=255;
 
 void setup() {
   size(700, 500);
-   size(700, 500);
    left= 50;
    right= width-50;
    top= 100;
@@ -42,7 +42,10 @@ void setup() {
    f.r=255;
    f.b=255;
    f.name= "5";
-//   
+
+///Rodent
+   mouse= new Rodent();
+//
    reset();
 }
 
@@ -53,6 +56,7 @@ void reset(){
   d.reset();
   e.reset();
   f.reset();
+  mouse.reset();
 ///wall
    wall=true;
 ///color
@@ -60,11 +64,18 @@ void reset(){
 }
  
  void keyPressed() {
+   if(key == 'q') {
+      exit();
+   }
    if(key == 'r') {
      reset();
    }
    if(key == 'w') {
      wall=false;
+   }
+   if(key == 'm') {
+     mouse.dx=5;
+     mouse.dy=3;
    }
  }
  
@@ -73,6 +84,7 @@ void reset(){
      rectMode( CORNERS );
      table(left, top, right, bottom);
      balls();
+     rodent();
  }
  
  void table( float east, float north, float west, float south ) {
@@ -120,6 +132,11 @@ void reset(){
    d.show();
    e.show();
    f.show();
+ }
+ 
+ void rodent() {
+    mouse.show();
+    mouse.move();
  }
    
 ////Elastic collisions
@@ -176,6 +193,58 @@ void reset(){
   }
 }
 
+
+class Rodent{
+////Properties   
+  float x, y, dx, dy;
+
+////Methods
+  void show(){
+    fill(#AA5D29);                     ellipse(x,y, 60, 30);//// Rodent body
+    fill(#FF55F7);                     ellipse(x+20, y-15, 10,20);//// Rodent left ear
+    fill(#FF55F7);                     ellipse(x+40, y-15, 10,20);//// Rodent right ear
+    fill( #AA5D29);                    ellipse(x+30, y-10, 40,20); ///// Rodent head
+    fill(#FF55F7);                     ellipse(x+50, y-10, 5,5);   ///// Rodent nose
+    fill(0);                           ellipse(x+35, y-15, 5,5);  ///// Rodent eye
+    stroke(#FF55F7); strokeWeight(2);  line(x-30, y, x-50, y+30); ////Rodent tail
+    stroke(0);///color Rodent legs black
+//////Rodent animation: leg movement
+    if(frameCount % 30 > 15){ 
+///Rodent legs first position
+    line( x-20, y+10, x-30, y+20);
+    line(x+20, y+10, x+30, y+20);}
+///Rodent leg second position
+    else{line( x-10, y+10, x-10, y+20);
+   }
+  }
+  
+ void move(){
+///mouse remains on table
+   if (y>bottom || y<top) {  dy=  -dy; }
+///reset mouse position without resetting entire program   
+   if(x>width) {reset();}
+   x+=dx;
+   y+=dy;
+ 
+   
+ }
+    
+
+  void reset(){
+///mouse is not a nusance until button is pressed
+    x=width-790; y=random(top,bottom);
+    dx=0; dy=0;
+  }
+  
+  boolean hit( float x, float y ) {
+    if (  dist( x,y, this.x,this.y ) < 30 ) return true;
+    else return false;
+ }
+}
+    
+
+
+  
  
    
    
