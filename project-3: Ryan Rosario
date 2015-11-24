@@ -65,7 +65,7 @@ void reset(){
 ///color
    tableRed=173; tableGreen=75; tableBlue=255;
 }
-/////Handlers
+/////Handlers: Keys, Clicks
  void keyPressed() {
    if(key == 'q') {
       exit();
@@ -87,6 +87,17 @@ void reset(){
      pigeon.dx=3;
    }
  }
+ 
+ void mousePressed(){
+   if (pigeon.hit(mouseX, mouseY)){
+     pigeon.payload();
+   }
+   if(mouse.hit(mouseX, mouseY)){
+     mouse.reset();
+   }
+ }
+ 
+ 
 ///Functions 
  void draw(){
      background( #19F5E0 );
@@ -156,6 +167,13 @@ void reset(){
     mouse.move();
  }
  void bird() {
+    kablooey(pigeon,a);
+    kablooey(pigeon,b);
+    kablooey(pigeon,c);
+    kablooey(pigeon,d);
+    kablooey(pigeon,e);
+    kablooey(pigeon,f);
+    //
     pigeon.show();
     pigeon.move();
  }
@@ -175,8 +193,13 @@ void reset(){
     }
  }
   
- 
- 
+  void kablooey(Bird pigeon, Ball u){
+     if(dist(pigeon.x, pigeon.bombY, u.x, u.y)<30) {
+       pigeon.bombY=0; pigeon.bombDY=0; 
+     }
+  }
+    
+    
  
  
  
@@ -275,6 +298,8 @@ class Rodent{
 class Bird {
 ////Properties
   float x, y, dx, dy;
+  float bombY=0, bombDY=0;
+  float grav=9.81/60;
 
 ////Methods
   void show() {
@@ -283,23 +308,53 @@ class Bird {
     fill(#7C95AF);     ellipse(x-20,y-10, 20, 20); }////head facing right
     else{
     fill(#7C95AF);     ellipse(x+20,y-10, 20,20);}///head facing left
+   ///wings   
    if(frameCount % 30 > 15){ 
     fill(#1665B7); triangle(x-10,y, x, y+25,  x+10, y);
-}
+   }
    else{fill(#1665B7); triangle(x-10, y, x, y-25, x+10, y);
+   }
+   ///bomb
+   if(bombDY != 0){
+    fill(#B26C16); ellipse(x-2, bombY-25, 3, 25);///fuse;
+    fill(#202236); ellipse(x,bombY, 30,30);///case
+  }
 }
-}
+
   void move() {
+   ///bird
    if( x>width) { dx= -dx;}
    if(dx == -3 && x<0) {dx= -dx;} 
      x+=dx;
+   ///bomb
+   if(bombDY != 0){ 
+       bombY += bombDY;
+       bombDY+=grav;
+   }
+   if(bombY>height){
+     bombY=0;
+     bombDY=0;
+   }
   }
+  
+  void payload(){
+    bombY=y+10;
+    bombDY= grav;
+    
+  }
+ 
  
   void reset() {
     x = width-740; y=35;
     dx=0;
+    bombDY=0;
   }
+ boolean hit( float x, float y ) {
+    if (  dist( x,y, this.x,this.y ) < 30 ) return true;
+    else return false;
+ }
 }
+ 
    
        
     
@@ -309,3 +364,4 @@ class Bird {
  
    
    
+
