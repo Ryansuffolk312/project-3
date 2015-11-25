@@ -1,13 +1,18 @@
+///////Ryan Rosario
+///////Project-3
+
 ////Globals
 Ball a,b,c,d,e,f;
 Rodent mouse;
 Bird pigeon;
 Button bR, bW, bM, bB;
-
+////Table
 float left, right, top, bottom;
 float middle;
 boolean wall=true;
 int tableRed=173, tableGreen=75, tableBlue=255;
+///Count
+int score= 0;
 
 void setup() {
   size(700, 500);
@@ -88,6 +93,8 @@ void reset(){
    wall=true;
 ///color
    tableRed=173; tableGreen=75; tableBlue=255;
+///count
+   score= 0;
 }
 /////Handlers: Keys, Clicks
  void keyPressed() {
@@ -107,18 +114,41 @@ void reset(){
      mouse.dy=3;
    }
 ///Release bird   
-   if(key == 'b') {
+   if(key == 'b'&& pigeon.dx == 0) {
      pigeon.dx=3;
    }
+///Drop bomb   
+   if(key == 'b'&& pigeon.x > 0) {
+     pigeon.payload();
+ }
  }
  
  void mousePressed(){
-   if (pigeon.hit(mouseX, mouseY)){
+   if(pigeon.hit(mouseX, mouseY)){ /////drop bomb
      pigeon.payload();
    }
-   if(mouse.hit(mouseX, mouseY)){
+   if(mouse.hit(mouseX, mouseY)){ ////catch mouse
      mouse.reset();
    }
+   ////balls:reset position
+   if(a.hit(mouseX, mouseY)){
+      a.x=100; a.y=280; a.dx=0; a.dy=0;
+      score -= 5;}
+   if(b.hit(mouseX, mouseY)){
+      b.reset();
+      score -= 5;}
+   if(c.hit(mouseX,mouseY)){
+     c.reset();
+     score -= 5;}
+   if(d.hit(mouseX,mouseY)){
+     d.reset();
+     score -= 5;}
+   if(f.hit(mouseX,mouseY)){
+     f.reset();
+     score -= 5;}
+   if(e.hit(mouseX,mouseY)){
+     e.reset();
+     score -= 5;}
    ////buttons
    if(mouseX > bR.x1 && mouseX < bR.x2 && mouseY > bR.y1 && mouseY < bR.y2 ) {      //// reset table
         reset();}
@@ -153,6 +183,7 @@ void reset(){
      rodent();
      bird();
      grass();
+     count();
  }
 ////Scene: Table and wall
  void table( float east, float north, float west, float south ) {
@@ -240,18 +271,21 @@ void reset(){
      float tmp;
      tmp=p.dx; p.dx=q.dx; q.dx=tmp;
      tmp=p.dy; p.dy=q.dy; q.dy=tmp;
+     score += 1;
    }
   }
   
   void snatch(Rodent mouse, Ball t) {
     if(mouse.hit(t.x, t.y)) {
       t.dx=0; t.dy=0; 
+      score -= 10;
     }
  }
   
   void kablooey(Bird pigeon, Ball u){
      if(dist(pigeon.x, pigeon.bombY, u.x, u.y)<30) {
        pigeon.bombY=0; pigeon.bombDY=0; 
+       score += 10;
      }
   }
     
@@ -268,6 +302,10 @@ int endLegs=699;
      line(grassx,grassy,grassx,grassy+len);
      grassx=grassx+spacing;
    }
+  }
+  
+  void count(){
+  fill(0);     text(score, 650, 50);
   }
   
  
@@ -455,6 +493,7 @@ class Bird {
  
    
    
+
 
 
 
