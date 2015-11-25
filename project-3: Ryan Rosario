@@ -106,6 +106,7 @@ void reset(){
      balls();
      rodent();
      bird();
+     grass();
  }
 ////Scene: Table and wall
  void table( float east, float north, float west, float south ) {
@@ -199,10 +200,26 @@ void reset(){
      }
   }
     
-    
+  void grass(){
+   stroke(#469B16); 
+   strokeWeight(5);
+   ////grass
+int grassy=475;
+int grassx=1;
+int spacing=6;
+int len=150;
+int endLegs=699;
+   while(grassx <= endLegs) {
+     line(grassx,grassy,grassx,grassy+len);
+     grassx=grassx+spacing;
+   }
+  }
+  
  
  
  
+
+
 /////Classes  
  class Ball {
   //// PROPERTIES:  position, speed, color, etc. ////   (What a Ball "has".)
@@ -364,4 +381,5 @@ class Bird {
  
    
    
+
 
