@@ -2,6 +2,7 @@
 Ball a,b,c,d,e,f;
 Rodent mouse;
 Bird pigeon;
+Button bR, bW, bM, bB;
 
 float left, right, top, bottom;
 float middle;
@@ -47,7 +48,26 @@ void setup() {
    mouse= new Rodent();
 ///Bird
    pigeon= new Bird();
-//
+////Buttons
+///Reset   
+   bR= new Button();
+   bR.g=255;
+   bR.name= "Reset (or press 'r')";
+///Wall
+   bW= new Button();
+   bW.r=255;
+   bW.name= "Wall (or press'w')";
+///Mouse
+   bM= new Button();
+   bM.r=149;
+   bM.g=82;
+   bM.b=11;
+   bM.name= "Mouse (or press 'm')";
+///Bird
+   bB=new Button();
+   bB.b=255;
+   bB.name= "Bird/bomb (or press 'b')";
+   //
    reset();
 }
 
@@ -60,6 +80,10 @@ void reset(){
   f.reset();
   mouse.reset();
   pigeon.reset();
+  bR.reset();
+  bW.x1=185; bW.x2=320; bW.y1=30; bW.y2=60;
+  bM.x1=325; bM.x2=465; bM.y1=30; bM.y2=60;
+  bB.x1=470; bB.x2=610; bB.y1=30; bB.y2=60;
 ///wall
    wall=true;
 ///color
@@ -95,7 +119,28 @@ void reset(){
    if(mouse.hit(mouseX, mouseY)){
      mouse.reset();
    }
- }
+   ////buttons
+   if(mouseX > bR.x1 && mouseX < bR.x2 && mouseY > bR.y1 && mouseY < bR.y2 ) {      //// reset table
+        reset();}
+   
+   if(mouseX > bW.x1 && mouseX < bW.x2 && mouseY > bW.y1 && mouseY < bW.y2 ) {     //// remove wall
+        wall=false;}
+   
+   if(mouseX > bM.x1 && mouseX < bM.x2 && mouseY > bM.y1 && mouseY < bM.y2 ) {    //// release rodent
+     mouse.dx=5;
+     mouse.dy=3;}       
+   
+   if(mouseX > bB.x1 && mouseX < bB.x2 && mouseY > bB.y1 && mouseY < bB.y2 && pigeon.dx == 0 ) {     //// release bird
+       pigeon.dx=3;}  
+    
+   if(mouseX > bB.x1 && mouseX < bB.x2 && mouseY > bB.y1 && mouseY < bB.y2 && pigeon.x>0 ){   ////drop bomb
+      pigeon.payload();}
+     
+   
+   
+        
+  }
+ 
  
  
 ///Functions 
@@ -104,6 +149,7 @@ void reset(){
      rectMode( CORNERS );
      table(left, top, right, bottom);
      balls();
+     button();
      rodent();
      bird();
      grass();
@@ -155,6 +201,15 @@ void reset(){
    e.show();
    f.show();
  }
+ 
+ void button(){
+   bR.show();
+   bW.show();
+   bM.show();
+   bB.show();
+ }
+   
+   
  
  void rodent() {
     snatch(mouse,a);
@@ -263,6 +318,24 @@ int endLegs=699;
   }
 }
 
+class Button {
+  float x1, y1, x2, y2;
+  int r,g,b;
+  String name="";
+
+////Methods
+  void show(){     
+  fill(r,g,b);
+  rect(x1,y1,x2,y2);
+  fill(0); text(name, x1+10, y1+20);
+  }
+  
+  void reset(){
+  x1=40; x2=180;
+  y1=30; y2=60;
+}
+}
+   
 
 class Rodent{
 ////Properties   
@@ -287,7 +360,7 @@ class Rodent{
     else{line( x-10, y+10, x-10, y+20);
    }
   }
-  
+ 
  void move(){
 ///mouse remains on table
    if (y>bottom || y<top) {  dy=  -dy; }
@@ -371,6 +444,7 @@ class Bird {
     else return false;
  }
 }
+
  
    
        
@@ -381,5 +455,6 @@ class Bird {
  
    
    
+
 
 
