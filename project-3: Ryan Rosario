@@ -96,6 +96,7 @@ void reset(){
 ///count
    score= 0;
 }
+
 /////Handlers: Keys, Clicks
  void keyPressed() {
    if(key == 'q') {
@@ -266,7 +267,7 @@ void reset(){
     pigeon.move();
  }
    
-////Elastic collisions, Rodent collision 
+////Elastic collisions, Rodent collision, Bomb collision 
  void collision(Ball p, Ball q) {
    if(p.hit( q.x, q.y) ) {
      float tmp;
@@ -289,7 +290,8 @@ void reset(){
        score += 10;
      }
   }
-    
+
+////Loops: Grass    
   void grass(){
    stroke(#469B16); 
    strokeWeight(5);
@@ -304,7 +306,8 @@ int endLegs=699;
      grassx=grassx+spacing;
    }
   }
-  
+
+///Messages   
   void info(){
   fill(0);     text(score, 650, 50);
   fill(0);     text("Ryan Rosario", 50, height-30);
