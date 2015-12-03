@@ -129,6 +129,7 @@ void reset(){
    }
    if(mouse.hit(mouseX, mouseY)){ ////catch mouse
      mouse.reset();
+     score = score + 50;
    }
    ////balls:reset position
    if(a.hit(mouseX, mouseY)){
@@ -183,7 +184,7 @@ void reset(){
      rodent();
      bird();
      grass();
-     count();
+     info();
  }
 ////Scene: Table and wall
  void table( float east, float north, float west, float south ) {
@@ -304,8 +305,13 @@ int endLegs=699;
    }
   }
   
-  void count(){
+  void info(){
   fill(0);     text(score, 650, 50);
+  fill(0);     text("Ryan Rosario", 50, height-30);
+  fill(0);     text("CST-112: Project 3", width/2.5, 10);
+  fill(0);     text("click any ball to reset position (-5 points). Press q to exit", width/4, 20);
+  
+  
   }
   
  
@@ -493,6 +499,7 @@ class Bird {
  
    
    
+
 
 
 
